@@ -20,4 +20,3 @@ for rev in `git rev-list $oldrev..$newrev`; do
     exit 1
   fi
 done
-
