@@ -1,0 +1,23 @@
+#!/bin/sh
+refname=$1
+oldrev=$2
+newrev=$3
+user=$( git config --list | grep user.name | tail -1 | cut -d "=" -f 2 )
+
+echo Ref: $refname Old-rev: $oldrev New-rev: $newrev User: $user
+
+# this will match the format #123456
+regex=#\d{6}
+
+# enforced custom commit message format
+for rev in `git rev-list $oldrev..$newrev`; do
+  commit=`git show -s --format="%h %B" $rev`
+  sha1=`cut -d " " -f 1 <<< commit`
+  message=`cut -d " " -f 2 <<< commit`
+  if ! [[ $message =~ $regex ]]; then
+    echo Message $message of commit $sha1 is not properly formated.  
+    echo "Please add the ticket number (e.g. #123456) and try again!" 
+    exit 1
+  fi
+done
+
