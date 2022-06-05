@@ -21,3 +21,4 @@ for rev in `git rev-list $oldrev..$newrev`; do
   fi
 done
 
+
